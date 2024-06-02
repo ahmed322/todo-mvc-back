@@ -11,7 +11,7 @@ const taskSchema = mongoose.Schema(
 			minlength: [3, "task must be at least 3 characters long"],
 			maxlength: [50, "task must be at most 50 characters long"],
 		},
-		taskStatus: String,
+		status: String,
 	},
 	{
 		timestamps: true,
