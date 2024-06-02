@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
-
+const cors = require("cors");
 // mdiddle wares
 const dbConnection = require("./config/dbConeection");
 const staticFileMiddleware = require("./middlewares/middleStatic");
@@ -22,7 +22,7 @@ const app = express();
 
 // user moragn in dev server only
 app.use(morgan("dev"));
-
+app.use(cors());
 app.use(express.json());
 staticFileMiddleware();
 
