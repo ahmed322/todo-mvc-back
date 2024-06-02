@@ -5,7 +5,7 @@ exports.createTask = (req, res) => {
 	const { task } = req.body;
 
 	if (task) {
-		const newTask = new taskModel({ task, taskStatus: "active" });
+		const newTask = new taskModel({ task, status: "active" });
 		newTask
 			.save()
 			.then((doc) => {
