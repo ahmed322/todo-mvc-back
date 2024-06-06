@@ -38,6 +38,22 @@ exports.deleteTask = (req, res) => {
 	}
 };
 
+exports.updateTask = (req, res) => {
+	let { id } = req.params;
+	taskModel
+		.findByIdAndUpdate(
+			{ _id: id },
+			{ task: req.body.task, status: req.body.status },
+			{ new: true }
+		)
+		.then((doc) => {
+			res.json(doc);
+		})
+		.catch((err) => {
+			res.status(404).send(err);
+		});
+};
+
 exports.deleteTasks = (req, res) => {
 	taskModel
 		.deleteMany({})
