@@ -12,7 +12,7 @@ exports.createTask = (req, res) => {
 				res.json(doc);
 			})
 			.catch((err) => {
-				res.status(404).send(err);
+				res.status(404).json({ msg: "failed to create task" });
 			});
 	}
 };
@@ -24,7 +24,7 @@ exports.getTasks = (req, res) => {
 			res.json(doc);
 		})
 		.catch((err) => {
-			res.status(404).send(err);
+			res.status(404).json({ msg: "failed to get tasks" });
 		});
 };
 
@@ -41,20 +41,20 @@ exports.updateTask = (req, res) => {
 			res.json(doc);
 		})
 		.catch((err) => {
-			res.status(404).send(err);
+			res.status(404).json({ msg: "failed to update task" });
 		});
 };
 
 exports.deleteTask = async (req, res) => {
 	let { id } = req.params;
 	try {
-		let task = taskModel.findByIdAndDelete(id);
+		let task = await taskModel.findByIdAndDelete(id);
 		if (!task) {
-			res.status(404).send("task not found");
+			res.status(404).json({ msg: "task not found" });
 		}
 		res.status(204).json();
 	} catch (err) {
-		res.status(500).send("An error occurred while deleting the task");
+		res.status(500).json({ msg: "server error" });
 	}
 };
 
@@ -65,6 +65,6 @@ exports.deleteTasks = (req, res) => {
 			res.json({}).status(204);
 		})
 		.catch((err) => {
-			res.status(404).send(err);
+			res.status(404).json({ msg: "failed to delete tasks" });
 		});
 };
