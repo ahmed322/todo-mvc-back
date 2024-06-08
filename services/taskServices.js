@@ -74,15 +74,3 @@ exports.deleteCompletedTasks = async (req, res) => {
 		res.status(404).json({ msg: "failed to delete tasks" });
 	}
 };
-
-// exports.deleteCompletedTasks = (req, res) => {
-// 	try {
-// 		taskModel
-// 		.findMany({ status: "completed" })
-// 		.then((doc) => {
-// 			res.json({doc}).status(204);
-// 		})
-// 	}catch((err) => {
-// 			res.status(404).json({ msg: "failed to delete tasks" });
-// 		});
-// };
