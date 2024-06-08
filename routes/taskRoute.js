@@ -5,13 +5,13 @@ const {
 	createTask,
 	updateTask,
 	deleteTask,
-	deleteTasks,
+	deleteCompletedTasks,
 } = require("../services/taskServices");
 
 router.get("/", getTasks);
 router.put("/:id", updateTask);
 router.post("/", createTask);
+router.delete("/", deleteCompletedTasks);
 router.delete("/:id", deleteTask);
-router.delete("/", deleteTasks);
 
 module.exports = router;

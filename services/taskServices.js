@@ -58,13 +58,31 @@ exports.deleteTask = async (req, res) => {
 	}
 };
 
-exports.deleteTasks = (req, res) => {
-	taskModel
-		.deleteMany({})
-		.then((doc) => {
-			res.json({}).status(204);
-		})
-		.catch((err) => {
-			res.status(404).json({ msg: "failed to delete tasks" });
-		});
+exports.deleteCompletedTasks = async (req, res) => {
+	try {
+		// delete completed tasks
+		let tasks = await taskModel.deleteMany({ status: "completed" });
+		// get remaining tasks
+		let data = await taskModel.find({});
+		// send error if no completed tasks
+		if (!tasks) {
+			res.status(404).json({ msg: "no completed tasks" });
+		}
+		res.json(data).status(204);
+		// catch error
+	} catch (err) {
+		res.status(404).json({ msg: "failed to delete tasks" });
+	}
 };
+
+// exports.deleteCompletedTasks = (req, res) => {
+// 	try {
+// 		taskModel
+// 		.findMany({ status: "completed" })
+// 		.then((doc) => {
+// 			res.json({doc}).status(204);
+// 		})
+// 	}catch((err) => {
+// 			res.status(404).json({ msg: "failed to delete tasks" });
+// 		});
+// };
