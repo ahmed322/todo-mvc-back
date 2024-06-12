@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
-const ApiError = require("./routes/apiErrorHandler");
+const ApiError = require("./utils/apiErrorHandler");
 const globalErrorHandler = require("./middlewares/ErrorHandleMiddleware");
 // mdiddle wares
 const dbConnection = require("./config/dbConeection");
