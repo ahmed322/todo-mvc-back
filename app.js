@@ -2,10 +2,11 @@ const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
+const ApiError = require("./routes/apiErrorHandler");
+const globalErrorHandler = require("./middlewares/ErrorHandleMiddleware");
 // mdiddle wares
 const dbConnection = require("./config/dbConeection");
 const staticFileMiddleware = require("./middlewares/middleStatic");
-
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -34,15 +35,11 @@ app.use("/api/v1/tasks", taskRoute);
 // handle routes error
 
 app.get("*", (req, res, next) => {
-	const err = new Error(`cant find this route ${req.originalUrl}`);
-	next(err.message);
+	next(new ApiError(`cant find this route ${req.originalUrl}`, 404));
 });
 
 // global handle error
-app.use((err, req, res, next) => {
-	res.status(500).json({ error: err });
-	next();
-});
+app.use(globalErrorHandler);
 // start server
 const serverPort = process.env.PORT || 3000;
 app.listen(3000, () => {
