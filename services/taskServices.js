@@ -1,7 +1,8 @@
 const taskModel = require("../models/taskModel");
+const ApiError = require("../utils/apiErrorHandler");
 
 // crud
-exports.createTask = (req, res) => {
+exports.createTask = (req, res, next) => {
 	const { task } = req.body;
 
 	if (task) {
@@ -12,23 +13,23 @@ exports.createTask = (req, res) => {
 				res.json(doc);
 			})
 			.catch((err) => {
-				res.status(404).json({ msg: "failed to create task" });
+				return next(new ApiError("failed to create task", 404));
 			});
 	}
 };
 
-exports.getTasks = (req, res) => {
+exports.getTasks = (req, res, next) => {
 	taskModel
 		.find({})
 		.then((doc) => {
 			res.json(doc);
 		})
 		.catch((err) => {
-			res.status(404).json({ msg: "failed to get tasks" });
+			return next(new ApiError("failed to get tasks", 404));
 		});
 };
 
-exports.updateTask = (req, res) => {
+exports.updateTask = (req, res, next) => {
 	let { id } = req.params;
 	let { status } = req.body;
 	taskModel
@@ -41,24 +42,24 @@ exports.updateTask = (req, res) => {
 			res.json(doc);
 		})
 		.catch((err) => {
-			res.status(404).json({ msg: "failed to update task" });
+			return next(new ApiError("failed to update task", 404));
 		});
 };
 
-exports.deleteTask = async (req, res) => {
+exports.deleteTask = async (req, res, next) => {
 	let { id } = req.params;
 	try {
 		let task = await taskModel.findByIdAndDelete(id);
 		if (!task) {
-			res.status(404).json({ msg: "task not found" });
+			return next(new ApiError("task not found", 404));
 		}
 		res.status(204).json();
 	} catch (err) {
-		res.status(500).json({ msg: "server error" });
+		return next(new ApiError("server error", 404));
 	}
 };
 
-exports.deleteCompletedTasks = async (req, res) => {
+exports.deleteCompletedTasks = async (req, res, next) => {
 	try {
 		// delete completed tasks
 		let tasks = await taskModel.deleteMany({ status: "completed" });
@@ -66,11 +67,11 @@ exports.deleteCompletedTasks = async (req, res) => {
 		let data = await taskModel.find({});
 		// send error if no completed tasks
 		if (!tasks) {
-			res.status(404).json({ msg: "no completed tasks" });
+			return next(new ApiError("no completed tasks", 404));
 		}
 		res.json(data).status(204);
 		// catch error
 	} catch (err) {
-		res.status(404).json({ msg: "failed to delete tasks" });
+		return next(new ApiError("failed to delete tasks", 404));
 	}
 };
